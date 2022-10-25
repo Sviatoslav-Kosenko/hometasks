@@ -7,7 +7,7 @@ public class MyProduct {
     private int fats;
     private int carbohydrates;
     private int calories;
-    private Product[] products;
+    public Product[] products;
     private int size;
 
     public MyProduct(int proteins, int fats, int carbohydrates, int calories, int size) {
@@ -55,7 +55,7 @@ public class MyProduct {
     }
 
     public void setProducts(int sizeBasket) {
-        this.products = new Product[size];
+        this.products = new Product[sizeBasket];
     }
 
     public int getProteins() {

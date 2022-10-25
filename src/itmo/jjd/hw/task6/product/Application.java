@@ -9,8 +9,8 @@ public class Application {
                 new Product("Мясо",1000,1000,1000,1000),
         };
         MyProduct myProduct = new MyProduct(1000,700,300,700,2);
-        for (Product temp : products){
-            myProduct.addProduct(temp);
+        for (Product product : products) {
+            myProduct.addProduct(product);
         }
         System.out.println(myProduct);
     }
