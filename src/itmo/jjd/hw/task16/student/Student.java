@@ -1,4 +1,4 @@
-package itmo.jjd.hw.task17.student;
+package itmo.jjd.hw.task16.student;
 
 import java.time.LocalDate;
 import java.util.Objects;

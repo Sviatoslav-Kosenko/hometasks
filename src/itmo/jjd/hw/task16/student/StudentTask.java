@@ -1,8 +1,8 @@
-package itmo.jjd.hw.task17.student;
+package itmo.jjd.hw.task16.student;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -37,52 +37,58 @@ public class StudentTask {
         //  10. Собрать Map<Student.Gender, Integer>, где Student.Gender - пол, Integer - суммарный возраст учеников данного пола
 
         //  1. Разделить учеников на две группы: мальчиков и девочек. Результат: Map<Student.Gender, ArrayList<Student>>
-        Map<Student.Gender, List<Student>> map01 = students.stream()
-                .collect(Collectors.groupingBy(Student::getGender));
+        Map<Student.Gender, ArrayList<Student>> map01 = students.stream()
+                .collect(Collectors.groupingBy(Student::getGender,
+                        Collectors.toCollection(ArrayList::new)));
         System.out.println(map01);
         //  2. Найти средний возраст учеников
-        List<Long> ages = students.stream().map(student -> ChronoUnit.YEARS.between(student.getBirth(), LocalDate.now()))
-                .collect(Collectors.toList());
-        for (Long age : ages) {
-            avr += age;
-        }
-        System.out.println(avr/ages.size());
-
+            System.out.println(
+                students.stream().collect(Collectors.averagingInt(student-> LocalDate.now().getYear() -
+                student.getBirth().getYear()))
+        );
         //  3. Найти самого младшего ученика
-        List<Student> junior = Collections.singletonList(students.stream()
-                .min(Comparator.comparing(Student::getBirth)).get());
+        Student junior = students.stream().max(Comparator.comparing(Student::getBirth)).orElse(null);
         System.out.println(junior);
-
         //  4. Найти самого старшего ученика
-        List<Student> old = Collections.singletonList(students.stream()
-                .max(Comparator.comparing(Student::getBirth)).get());
+        Student old = students.stream().min(Comparator.comparing(Student::getBirth)).orElse(null);
         System.out.println(old);
-
         // 5. Собрать учеников в группы по году рождения
-        Map<Integer, List<Student>> map03 = students.stream()
+        Map<Integer, List<Student>> mapByBirth = students.stream()
                 .collect(Collectors.groupingBy(student -> student.getBirth().getYear()));
-        System.out.println(map03);
-
+        System.out.println(mapByBirth);
         //  6. Убрать учеников с одинаковыми именами, имена и дату рождения оставшихся вывести в консоль
-        Map<String, List<Student>> map04 = students.stream()
-                .collect(Collectors.groupingBy(student -> student.getName()));
-        for (List<Student> studentList : map04.values()){
-            if (students.size() == 1) System.out.println(
-                    "Name: " + students.get(0).getName() + "Birth: " + students.get(0).getBirth());
-        }
-        System.out.println(map04);
-
+        Collection<Student> uniqueByName = students.stream()
+                .collect(Collectors.toMap(
+                        Student::getName,
+                        Function.identity(),
+                        ((stud1, stud2) -> stud1)
+                )).values();
+        uniqueByName.forEach(student -> System.out.println(student.getName() + ": " + student.getBirth()));
         //  7. Отсортировать по полу, потом по дате рождения, потом по имени (в обратном порядке), собрать в список (List)
-        List<Student> studentList01 = students.stream()
-                .sorted(Comparator.comparing(Student::getGender).thenComparing(Student::getBirth)
-                        .thenComparing((students1,students2) -> students2.getName().compareTo(students1.getName())))
-                .collect(Collectors.toList());
-        System.out.println(studentList01);
-
+       students.sort(
+               Comparator.comparing(Student::getGender)
+                       .thenComparing(Student::getBirth)
+                       .thenComparing(Student::getName).reversed()
+       );
+        System.out.println(students);
         //  8. Вывести в консоль всех учеников в возрасте от N до M лет
-
+        int from = 10;
+        int to = 10;
+        students.forEach(pupil -> {
+            if (LocalDate.now().getYear() - pupil.getBirth().getYear() < to
+                    && LocalDate.now().getYear() - pupil.getBirth().getYear() >= from){
+                System.out.println(pupil);
+            }
+        });
         //  9. Собрать в список всех учеников с именем=someName
-
-
+        List<Student> studentByName = students.stream()
+                .filter(student -> student.getName().equals("Петр")).toList();
+        // 10. Собрать Map<Pupil.Gender, Integer>,
+        // где Pupil.Gender - пол, Integer - суммарный возраст учеников данного пола
+        Map<Student.Gender, Integer> genderCount = students.stream()
+                .collect(Collectors.groupingBy(Student::getGender
+                ,Collectors.summingInt(student -> LocalDate.now().getYear()
+                                - student.getBirth().getYear())));
+        System.out.println(genderCount);
     }
 }

@@ -1,4 +1,4 @@
-package itmo.jjd.hw.task17.transactions;
+package itmo.jjd.hw.task16.transactions;
 
 public class Transaction {
     private String uuid;

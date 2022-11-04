@@ -6,62 +6,31 @@ public class MessageTask {
     public static void countEachPriority(List<Message> messageList) {
         // TODO:  Подсчитать количество сообщений для каждого приоритета
         //  Ответ в консоль
-        List<Message> tempList = new ArrayList<>();
-        for (int i = 0; i < messageList.size(); i++){
-            tempList.add(null);
+        int[] counts = new int[MessagePriority.values().length];
+        for (Message message : messageList) {
+            counts[message.getPriority().ordinal()] += 1;
         }
-        Collections.copy(tempList,messageList);
-        int count = 0;
-        for (int i = 0; i < messageList.size(); i++) {
-            Iterator<Message> iterator = tempList.listIterator();
-            while (iterator.hasNext()){
-                Message temp = iterator.next();
-                if (messageList.get(i).getPriority().equals(temp.getPriority())){
-                    count++;
-                    iterator.remove();
-                }
-            }
-            if (count !=0){
-                System.out.println(count + " сообщения имеют приоритеты " + messageList.get(i).getPriority().name());
-                count = 0;
-            }
+        for (MessagePriority priority : MessagePriority.values()) {
+            System.out.println(priority + ": " + counts[priority.ordinal()]);
         }
     }
 
     public static void countEachCode(List<Message> messageList) {
         // TODO: Подсчитать количество сообщений для каждого кода сообщения
         //  Ответ в консоль
-        List<Message> listTemp = new ArrayList<>();
-        for (int i = 0; i < messageList.size(); i++) {
-            listTemp.add(null);
+        int[] counts = new int[10];
+        for (Message message : messageList) {
+            counts[message.getCode()] += 1;
         }
-        Collections.copy(listTemp,messageList);
-        int count = 0;
-        for (Message message: messageList) {
-            Iterator<Message> iterator = listTemp.listIterator();
-            while (iterator.hasNext()){
-                Message temp = iterator.next();
-                if (message.getCode() == temp.getCode()){
-                    count++;
-                    iterator.remove();
-                }
-            }
-            if (count != 0){
-                System.out.println(count + "сообщение с кодом " + message.getCode());
-                count = 0;
-            }
+        for (int i = 0; i < counts.length; i++) {
+            System.out.println("Код " + i + ", встречается = " + counts[i]);
         }
     }
     public static void uniqueMessageCount(List<Message> messageList) {
         // TODO: Подсчитать количество уникальных сообщений
         //  Ответ в консоль
-        int count = 0;
-        HashSet<Message> hashSet = new HashSet<>();
-        for (Message message : messageList) {
-            if (hashSet.add(message))
-                count++;
-        }
-        System.out.println("уникальных сообщений: " + count);
+        System.out.println("Количество уникальных сообщений: " +
+                new HashSet<>(messageList).size());
     }
 
     public static List<Message> uniqueMessagesInOriginalOrder(List<Message> messageList) {
@@ -80,30 +49,31 @@ public class MessageTask {
     public static void removeEach(List<Message> messageList, MessagePriority priority) {
         // TODO: удалить из коллекции каждое сообщение с заданным приоритетом
         //  вывод в консоль до удаления и после удаления
-        Iterator<Message> iterator = messageList.listIterator();
+        System.out.println("До удаления " + messageList.size());
+        Iterator<Message> iterator = messageList.iterator();
         while (iterator.hasNext()){
-            if (iterator.next().getPriority().equals(priority)) iterator.remove();
+            if (iterator.next().getPriority() == priority) {
+                iterator.remove();
+            }
         }
-        System.out.println(messageList);
+        System.out.println("После удаления " + messageList.size());
     }
     public static void removeOther(List<Message> messageList, MessagePriority priority) {
         // TODO: удалить из коллекции все сообщения, кроме тех, которые имеют заданный приоритет
         //  вывод в консоль до удаления и после удаления
-        Iterator<Message> iterator = messageList.listIterator();
+        System.out.println("До удаления " + messageList.size());
+        Iterator<Message> iterator = messageList.iterator();
         while (iterator.hasNext()){
-            if (!(iterator.next().getPriority().equals(priority))) iterator.remove();
+            if (iterator.next().getPriority() != priority) {
+                iterator.remove();
+            }
         }
-        System.out.println(messageList);
+        System.out.println("После удаления " + messageList.size());
     }
 
     public static void main(String[] args) {
         List<Message> messages = Message.generate(34);
         System.out.println(messages);
-        countEachPriority(messages);
-        countEachCode(messages);
-        uniqueMessageCount(messages);
-        System.out.println(uniqueMessagesInOriginalOrder(messages));
-        removeEach(messages,MessagePriority.MEDIUM);
-        removeOther(messages,MessagePriority.LOW);
+
     }
 }

@@ -1,9 +1,9 @@
-package itmo.jjd.hw.task17.transactions;
+package itmo.jjd.hw.task16.transactions;
 
 import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 public class TransactionsTask {
     public static void main(String[] args) {
         Account account1 = new Account("781057000", 2000);

@@ -1,4 +1,4 @@
-package itmo.jjd.hw.task17;
+package itmo.jjd.hw.task16;
 
 import java.util.Arrays;
 import java.util.Map;
