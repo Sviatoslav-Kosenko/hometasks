@@ -4,57 +4,29 @@ import java.time.LocalDate;
 
 public class Application {
     public static void main(String[] args) {
-        Fitness fitness = new Fitness(Area.SWIMMING, Area.GYM,Area.GROUP);
-        fitness.setCurrentDate(LocalDate.of(2022, 10, 23));
-        SingleAbonement[] singleAbonements = new SingleAbonement[10];
-        for (int i = 0; i < singleAbonements.length; i++) {
-            singleAbonements[i] = new SingleAbonement(LocalDate.of(2022,10,24),
-                    LocalDate.of(2022, 10, 29),
-                    new OwnerInform("Святослав","Косенко",(int)(1980 +Math.random() * 25)));
-        }
-        DayAbonement[] dayAbonements = new DayAbonement[10];
-        for (int i = 0; i < dayAbonements.length; i++) {
-            dayAbonements[i] = new DayAbonement(LocalDate.of(2022,10,24),
-                    LocalDate.of(2022, 10, 29),
-                    new OwnerInform("Григорий","Пушкин",(int)(1965 +Math.random() * 25)));
-        }
-        FullAbonement[] fullAbonements = new FullAbonement[10];
-        for (int i = 0; i < fullAbonements.length; i++) {
-            fullAbonements[i] = new FullAbonement (LocalDate.of(2022,10,24),
-                    LocalDate.of(2022, 10, 29),
-                    new OwnerInform("Арсений","Волк",(int)(1975 +Math.random() * 30)));
-        }
-        for (int i = 0; i < 100; i++) {
-            if (Math.random() < 0.3){
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.SWIMMING,singleAbonements[(int) (Math.random() * 10)]);
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.GYM, singleAbonements[(int)(Math.random() * 10)]);
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.GROUP,singleAbonements[(int)(Math.random() * 10)]);
-            }
-            if (Math.random() < 0.6){
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.SWIMMING,singleAbonements[(int) (Math.random() * 10)]);
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.GYM, singleAbonements[(int)(Math.random() * 10)]);
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.GROUP,singleAbonements[(int)(Math.random() * 10)]);
-            }
-            if (Math.random() < 0.9){
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.SWIMMING,singleAbonements[(int) (Math.random() * 10)]);
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.GYM, singleAbonements[(int)(Math.random() * 10)]);
-                fitness.setCurrentTime(ConstantValues.getCurrentTime());
-                fitness.nextAbonement(Area.GROUP,singleAbonements[(int)(Math.random() * 10)]);
-            }
-        }
-        System.out.println("В swimming area" + Area.SWIMMING.getCount() + " посетителей");
-        System.out.println("В gym area" + Area.GYM.getCount() + " посетителей");
-        System.out.println("В group area" + Area.GROUP.getCount() + " посетителей");
-        fitness.getAboutAbonementsInfo();
-        fitness.closeFitness();
-        fitness.getAboutAbonementsInfo();
-    }
+        OwnerInform owner = new OwnerInform("Svyat", "Kosenko", LocalDate.of(1988,2,3),Area.SWIMMING);
+        OwnerInform owner1 = new OwnerInform("Tom", "Crouise", LocalDate.of(2000,4,12),Area.GYM);
+        OwnerInform owner2 = new OwnerInform("Elizabeth", "Taylor", LocalDate.of(2001,6,22),Area.GROUPS);
+        OwnerInform owner3 = new OwnerInform("Robert", "D.Jr.", LocalDate.of(1995,8,10),Area.SWIMMING);
+        OwnerInform owner4 = new OwnerInform("Tom", "Hardy", LocalDate.of(2004,5,4),Area.GROUPS);
+        OwnerInform owner5 = new OwnerInform("Patric", "K", LocalDate.of(1981,2,3),Area.GYM);
+
+        Abonement[] gym = new Abonement[Fitness.arraySize];
+        Abonement[] swimming = new Abonement[Fitness.arraySize];
+        Abonement[] groups = new Abonement[Fitness.arraySize];
+
+        Fitness fitness = new Fitness(gym,swimming,groups);
+        fitness.addAbon(new Abonement(owner,AbonTypes.ONEDAY,LocalDate.of(2022,11,13)),
+                new Abonement(owner1,AbonTypes.ONEDAY,LocalDate.of(2022,11,13)),
+                new Abonement(owner2,AbonTypes.ONEDAY,LocalDate.of(2022,11,13)));
+        Fitness fitness1 = new Fitness(gym,swimming,groups);
+        fitness.addAbon(new Abonement(owner,AbonTypes.EVERYDAY,LocalDate.of(2022,11,13)),
+                new Abonement(owner3,AbonTypes.EVERYDAY,LocalDate.of(2022,11,13)),
+                new Abonement(owner4,AbonTypes.EVERYDAY,LocalDate.of(2022,11,13)));
+        Fitness fitness2 = new Fitness(gym,swimming,groups);
+        fitness.addAbon(new Abonement(owner,AbonTypes.FULL,LocalDate.of(2022,11,13)),
+                new Abonement(owner5,AbonTypes.FULL,LocalDate.of(2022,11,13)));
+        fitness.messageForOwner(owner, Area.SWIMMING);
+        fitness.fitnessClose();
+}
 }
