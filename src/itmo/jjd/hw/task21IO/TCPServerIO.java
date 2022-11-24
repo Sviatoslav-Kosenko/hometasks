@@ -9,6 +9,7 @@ import java.net.Socket;
 
 public class TCPServerIO {
         private int port;
+        private final String sender = "Server";
         private String messageText;
         private int messageCounter;
         public TCPServerIO(int port) {
@@ -31,6 +32,9 @@ public class TCPServerIO {
 
                     Message fromClient = connection.readMessage();
                     System.out.println("От клиента: " + fromClient);
+
+                    messageCounter++;
+
                     if ("/help".equalsIgnoreCase(fromClient.getText())){
                         messageText = getHelpText();
                     } else if ("/count".equalsIgnoreCase(fromClient.getText())) {
@@ -39,7 +43,7 @@ public class TCPServerIO {
                         messageText = "Сообщение от сервера";
                     }
 
-                    Message message = new Message("Server", "Сообщение от сервера");
+                    Message message = new Message(sender, messageText);
                     connection.sendMessage(message);
                 }
             } catch (IOException | ClassNotFoundException e) {

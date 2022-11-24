@@ -22,7 +22,6 @@ public class TCPClientIO {
 
         System.out.println("Введите имя");
         String name = scanner.nextLine();
-        String messageText;
 
         while (true){
             System.out.println("Введите сообщение");
@@ -40,6 +39,7 @@ public class TCPClientIO {
                 connection.sendMessage(message);
                 Message fromServer = connection.readMessage();
                 System.out.println("Сообщение от сервера: " + fromServer);
+                messageTime = LocalDateTime.now();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Обработка IOException и ClassNotFoundException");
             } catch (Exception e) {
@@ -51,7 +51,7 @@ public class TCPClientIO {
         }
     }
     private int getPingTime(Message message){
-        return  (messageTime.getNano() - message.getDateTime().getNano());
+        return  (messageTime.getNano() - message.getDateTime().getNano()) / 1_000_000;
     }
     public static void main(String[] args) {
         new TCPClientIO("127.0.0.1", 8090).run();
